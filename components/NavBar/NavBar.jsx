@@ -1,5 +1,5 @@
-import React from 'react'
-import React, {useState, useEffect} from "react";
+import React from 'react';
+import {useState, useEffect} from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -10,7 +10,7 @@ import { CgMenuLeft, CgMenuRight } from 'react-icons/cg'
 
 // Internal Imports
 import { Discover, HelpCenter, Notification, Profile, SideBar } from './index'
-import { Button } from '../componentindex'  
+import { Button, Footer } from '../componentindex'  
 import images from '../../img'
 
 const NavBar = () => {
@@ -19,17 +19,57 @@ const NavBar = () => {
 
     const [discover, setDiscover] = useState(false);
     const [help, setHelp] = useState(false);
-    const [potification, setNotification] = useState(false);
+    const [notification, setNotification] = useState(false);
     const [profile, setProfile] = useState(false);
     const [openSideMenu, setOpenSideMenu] = useState(false);
 
     const openMenu = (e) => {
         const btnText = e.target.innerText;
-        if(btnText == Discover){
+        if(btnText == "Discover"){
             setDiscover(true);
             setHelp(false);
             setNotification(false);
             setProfile(false);
+        } else if(btnText =="Help Center"){
+            setDiscover(false);
+            setHelp(true);
+            setNotification(false);
+            setProfile(false);
+        } else{
+            setDiscover(false);
+            setHelp(false);
+            setNotification(false);
+            setProfile(false);
+        }
+    };
+
+    const openNotification = () => {
+        if(!notification){
+            setDiscover(false);
+            setHelp(false);
+            setNotification(true);
+            setProfile(false);
+        } else{
+            setNotification(false);
+        }
+    };
+
+    const openProfile = () => {
+        if(!profile){
+            setDiscover(false);
+            setHelp(false);
+            setNotification(false);
+            setProfile(true);
+        } else{
+            setProfile(false);
+        }
+    };
+
+    const openSideBar = () => {
+        if(!openSideMenu){
+            setOpenSideMenu(true);
+        } else{
+            setOpenSideMenu(false);
         }
     }
 
@@ -51,13 +91,58 @@ const NavBar = () => {
                 {/* END OF LEFT SECTION */}
                 <div className="navbar_container_right">
                     <div className="navbar_container_right_discover">
-                        <p onClick={(e) => {}}>Discover</p>
-                        <div className="navbar_container_right_discover_box">
-                            <Discover/>
+
+                        {/* Discover Menu */}
+                        <p onClick={(e) => openMenu(e)}>Discover</p>
+                        {discover && (
+                            <div className="navbar_container_right_discover_box">
+                                <Discover/>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Help Center Menu */}
+                    <div className="navbar_container_right_help">
+                    <p onClick={(e) => openMenu(e)}>Help Center</p>
+                    {help && (
+                            <div className="navbar_container_right_help_box">
+                                <HelpCenter/>
+                            </div>
+                        )}
+                    </div>
+
+                    {/* Notification */}
+                    <div className="navbar_container_right_notify">
+                        <MdNotifications className='notify' onClick={() => openNotification()} />
+                        {notification && <Notification/>}
+                    </div>
+
+                    {/* Create Button Section */}
+                    <div className="navbar_container_right_button">
+                        <Button btnText = "Create"/>
+                    </div>
+
+                    {/* User Profile */}
+                    <div className="navbar_container_right_profile_box">
+                        <div className="navbar_container_right_profile">
+                            <Image src={images.user1} alt='Profile' className='navbar_container_right_profile' height={40} width={40} onClick={() => openProfile()}/>
+                            {profile && <Profile/>}
                         </div>
+                    </div>
+
+                    {/* Menu Button - Only Visible in smaller devices */}
+                    <div className="navbar_container_right_menuBtn">
+                        <CgMenuRight className='menuIcon' onClick={() => openSideBar()}/>
                     </div>
                 </div>
             </div>
+
+            {/* Sidebar Component - keeping this oot because it only shown on smaller devices */}
+            {openSideMenu && (
+                <div className="SideBar">
+                    <SideBar setOpenSideMenu = {setOpenSideMenu} />
+                </div>
+            )}
         </div>
     )
 };

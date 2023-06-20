@@ -4,4 +4,4 @@ import Notification from "./Notification";
 import Profile from "./Profile";
 import SideBar from "./SideBar";
 
-export {Discover, HelpCenter, Profile, Notification, SideBar}
+export {Discover, HelpCenter, Profile, Notification, SideBar};
